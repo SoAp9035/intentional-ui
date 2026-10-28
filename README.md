@@ -2,35 +2,34 @@
 
 An [Agent Skill](https://agentskills.io) for creating, reviewing, and improving frontend UI/UX. It steers away from generic AI-generated design (decorative eyebrows, purple gradients, emoji icons, tiny low-contrast text, fabricated proof) toward product-specific, readable interfaces.
 
-See [`skills/intentional-ui/SKILL.md`](skills/intentional-ui/SKILL.md).
+Works with any agent that supports the Agent Skills format. See [`skills/intentional-ui/SKILL.md`](skills/intentional-ui/SKILL.md).
 
 ## Install
-
-### Any agent (Claude Code, Codex, Cursor, …)
 
 ```sh
 npx skills add SoAp9035/intentional-ui
 ```
 
-### Claude Code plugin
+The CLI detects your installed agents and asks where to install. Add `-g` to install globally instead of into the current project.
+
+### Manual
+
+Copy `skills/intentional-ui` into your agent's skills directory:
+
+```sh
+SKILLS_DIR=~/.agents/skills   # replace with your agent's skills directory
+mkdir -p "$SKILLS_DIR/intentional-ui" && curl -fsSL https://raw.githubusercontent.com/SoAp9035/intentional-ui/main/skills/intentional-ui/SKILL.md -o "$SKILLS_DIR/intentional-ui/SKILL.md"
+```
+
+### Plugin marketplaces
+
+The repo also ships a plugin manifest in `.claude-plugin/`, so agents with plugin marketplace support can add it directly, e.g. in Claude Code:
 
 ```
 /plugin marketplace add SoAp9035/intentional-ui
 /plugin install intentional-ui@intentional-ui
 ```
 
-### Manual
+## Usage
 
-Personal (all projects):
-
-```sh
-mkdir -p ~/.claude/skills/intentional-ui && curl -fsSL https://raw.githubusercontent.com/SoAp9035/intentional-ui/main/skills/intentional-ui/SKILL.md -o ~/.claude/skills/intentional-ui/SKILL.md
-```
-
-Project only (run in the project root):
-
-```sh
-mkdir -p .claude/skills/intentional-ui && curl -fsSL https://raw.githubusercontent.com/SoAp9035/intentional-ui/main/skills/intentional-ui/SKILL.md -o .claude/skills/intentional-ui/SKILL.md
-```
-
-The skill activates automatically on UI tasks, or invoke it with `/intentional-ui`.
+The skill loads automatically on UI tasks; no extra setup is needed.
