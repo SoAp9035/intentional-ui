@@ -1,0 +1,16 @@
+{
+  "name": "intentional-ui",
+  "owner": {
+    "name": "Ahmet Burhan Kayalı"
+  },
+  "metadata": {
+    "description": "Intentional UI skill for product-specific, readable frontend design."
+  },
+  "plugins": [
+    {
+      "name": "intentional-ui",
+      "source": "./",
+      "description": "Product-specific, readable frontend UI/UX without generic AI-generated design tells."
+    }
+  ]
+}
