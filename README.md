@@ -30,6 +30,15 @@ The repo also ships a plugin manifest in `.claude-plugin/`, so agents with plugi
 /plugin install intentional-ui@intentional-ui
 ```
 
+## Update
+
+```sh
+npx skills check    # list available updates
+npx skills update   # update installed skills
+```
+
+Manual installs: rerun the `curl` command above. Plugin installs: refresh the marketplace, e.g. `/plugin marketplace update intentional-ui` in Claude Code.
+
 ## Usage
 
 The skill loads automatically on UI tasks; no extra setup is needed.
