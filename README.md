@@ -21,15 +21,6 @@ SKILLS_DIR=~/.agents/skills   # replace with your agent's skills directory
 mkdir -p "$SKILLS_DIR/intentional-ui" && curl -fsSL https://raw.githubusercontent.com/SoAp9035/intentional-ui/main/skills/intentional-ui/SKILL.md -o "$SKILLS_DIR/intentional-ui/SKILL.md"
 ```
 
-### Plugin marketplaces
-
-The repo also ships a plugin manifest in `.claude-plugin/`, so agents with plugin marketplace support can add it directly, e.g. in Claude Code:
-
-```
-/plugin marketplace add SoAp9035/intentional-ui
-/plugin install intentional-ui@intentional-ui
-```
-
 ## Update
 
 ```sh
@@ -37,7 +28,7 @@ npx skills check    # list available updates
 npx skills update   # update installed skills
 ```
 
-Manual installs: rerun the `curl` command above. Plugin installs: refresh the marketplace, e.g. `/plugin marketplace update intentional-ui` in Claude Code.
+Manual installs: rerun the `curl` command above.
 
 ## Usage
 
