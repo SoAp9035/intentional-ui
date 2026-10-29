@@ -1,6 +1,6 @@
 ---
 name: intentional-ui
-description: Use when creating, reviewing, or improving frontend UI/UX for websites, landing pages, dashboards, forms, navigation, or game interfaces. Prevents generic AI-generated design (decorative eyebrow labels, purple gradients, emoji icons, tiny low-contrast text, formulaic layouts, vague copy, fabricated proof) and pushes toward product-specific, readable design. Preserves established designs during polish work. Skip backend-only tasks.
+description: Use when designing, redesigning, polishing, or reviewing the look and usability of frontend UI — websites, landing pages, dashboards, forms, navigation, mockups, or game interfaces. Prevents generic AI-generated design (decorative eyebrow labels, purple gradients, emoji icons, tiny low-contrast text, formulaic layouts, vague copy, fabricated proof) and pushes toward product-specific, readable, committed design. Preserves established designs during polish work. For feature work or bug fixes inside an existing UI, only its convention rules apply. Skip backend-only tasks.
 ---
 
 # Intentional UI
@@ -9,23 +9,24 @@ Create interfaces that suit their product and stay comfortable to read and use. 
 
 ## 1. Scope and precedence
 
-Decide which mode applies before changing anything. The mode depends on the task, not just on whether UI already exists. When rules in this skill conflict, this section wins.
+Decide which mode applies before changing anything. The mode depends on the task, not just on whether UI already exists. When rules in this skill conflict, this section wins. Explicit user instructions override everything in this skill except the hard rules in §2; a requested mockup or demo is covered there.
 
-The core job is removing AI-generated tells (§4) and keeping the hard rules (§2). Readability (§5) and verification (§8) support that job; they are not a mandate for an accessibility audit or a codebase cleanup.
+The core job is removing AI-generated tells (§4), keeping the hard rules (§2), and — in new UI — replacing what was removed with product-specific substance (§6) rather than leaving the page thin. Readability (§5) and verification (§8) support that job; they are not a mandate for an accessibility audit or a codebase cleanup.
 
 - **Existing UI, task is UI improvement** (polish, readability, "make it better"): Preserve the visual identity, layout, interactions, and component system; prefer targeted edits over broad redesigns. Within the screens and components in scope, fix readability and usability problems and remove §4 tells that fail their own test (e.g. an eyebrow that can be deleted without losing information). An explicit redesign request counts as new UI for the screens it names.
-- **Existing UI, task is something else** (feature, bug fix): Don't sweep unrelated screens. Follow local conventions in new code and mention notable issues from §4–§5 in your report.
+- **Existing UI, task is something else** (feature, bug fix): Don't sweep unrelated screens. Follow local conventions in new code, even where they include §4 patterns. Don't audit the rest of the UI; mention only serious problems you ran into, such as unreadable essential text or a broken state.
 - **New UI:** Apply this skill fully. Derive the direction from the product's content and users, not a default SaaS landing-page formula.
 - **Change budget in existing UI:** Keep the diff proportional to the task. Don't make codebase-wide mechanical changes — `px`→`rem`, color formats, renamed tokens, a new spacing or type scale, swapped fonts, a different styling approach — unless the user asks. Report systemic issues (units that block text resizing, contrast problems in the theme, an inconsistent type scale) with a short suggested fix instead of applying it. If a fix would touch shared tokens, global styles, or many files, ask first.
-- **What counts as intentional:** Distinctive choices that aren't §4 tells (a custom typeface, an unusual layout, hand-tuned spacing) are preserved by default; they don't need documentation. A §4 tell stays only with evidence — brand guidelines, a documented design-system component, the user saying so, or the pattern carrying real information. Repetition or consistency across the codebase is not evidence; generated codebases repeat their defaults. List every tell you remove in your report so a deliberate one can be restored.
+- **What counts as intentional:** Distinctive choices that aren't §4 tells (a custom typeface, an unusual layout, hand-tuned spacing) are preserved by default; they don't need documentation. A §4 tell stays only with evidence — brand guidelines, a documented design-system component, the user saying so, or the pattern carrying real information. Repetition alone is not evidence, since generated codebases repeat their defaults, but it does raise the stakes: if a tell lives in a shared component or recurs across many screens, list it with a suggested fix and ask before removing it. List every tell you remove in your report so a deliberate one can be restored.
 - **Always:** Follow explicit user references and intentional brand conventions. A familiar pattern is not automatically wrong; an unjustified default is.
 - **Game interfaces:** Stylized type, uppercase HUD labels, dense displays, and heavy effects can be part of the game's identity. Apply the readability rules to instructions, menus, settings, dialog, and anything players must read under time pressure.
 
-## 2. Hard rules (both modes)
+## 2. Hard rules (all modes)
 
 - **Never fabricate proof.** No invented metrics, testimonials, customer logos, user counts, ratings, press mentions, "live" indicators, or trust badges. When real content is missing, use clearly marked placeholders such as `[Customer quote — needs real source]` or `[Metric]`, and list them in your final report.
 - **Never invent functionality.** No inert controls, fake progress indicators, or UI for features that don't exist.
 - **Never ship unreadable essential text.** Instructions, prices, navigation, CTAs, and form labels must meet the readability rules in §5.
+- **Mockups, prototypes, and demos:** When the user asks for one, realistic sample data and non-functional controls are allowed — a mockup with `[Metric]` everywhere fails its purpose. Keep sample data plausible and neutral (no real companies, logos, or people presented as customers), keep it identifiable in code (e.g. a sample-data module or a comment), and list it in your report so it isn't shipped as fact. Add social proof such as testimonials or press only when asked.
 
 ## 3. Start with the product
 
@@ -81,7 +82,11 @@ Removing tells isn't enough; a page with no eyebrows, sentence case, and safe gr
 **For new pages or substantial redesigns, state the design direction in one sentence tied to the product before writing code.** For targeted fixes and additions, follow the established direction without redefining it. Examples of a direction: "dense, neutral, data-first, because analysts scan tables all day" or "warm and photographic, because people choose a café by its atmosphere." Then make every choice serve that sentence.
 
 - **Marketing pages and content sites** usually benefit from a distinct identity: type, color, and imagery that could only belong to this product.
-- **Tools, dashboards, and forms** usually benefit from restraint: a familiar, highly legible typeface, a quiet palette with color reserved for state and data, and density appropriate to the task.
+- **Tools, dashboards, and forms** usually benefit from restraint: a familiar, highly legible typeface, a quiet palette with color reserved for state and data, and density appropriate to the task. Restraint is not blandness; identity shows in precise details, well-designed states, and data presented with care.
+
+**Fill the space with substance.** A page stripped of tells and given nothing in their place reads thin and unfinished. Replace removed devices with product-specific substance: larger, more confident type; the full real content; real imagery, data, or examples; a field of color from the palette. Don't refill the space with another ornament.
+
+**Commit to the direction.** Spend boldness in one place: one memorable element — a striking type treatment, a signature interaction, an unexpected layout move, an orchestrated moment of motion — with everything around it quiet and disciplined. When torn between safe and committed, commit, within the readability rules. Motion and delight are welcome when they serve the direction or respond to the user's action; one orchestrated moment lands better than fade-ins on every section.
 
 The examples below illustrate grounding choices in the product; they are not treatments to apply.
 
@@ -99,7 +104,7 @@ Work in order of user impact:
 2. **Content:** Concise, product-specific headings, instructions, and CTA labels (§2 applies).
 3. **Typography:** Roles, metrics, contrast, measure, and spacing fixed together (§5).
 4. **Layout:** Related content grouped, consistent spacing, no pointless empty areas.
-5. **Visual identity:** Grounded choices (§6), restrained effects.
+5. **Visual identity:** Grounded, committed choices (§6); effects only where they serve the direction.
 6. **Interactions:** Legible focus, hover, active, selected, disabled, loading, success, and error states. Respect `prefers-reduced-motion`.
 
 For existing UI, search likely components for `uppercase`, `tracking-widest`, `text-xs`, low-opacity text, arbitrary tiny font sizes, and repeated eyebrow/pill patterns — then **read their purpose before changing anything**. Rank findings by impact (unreadable copy and unclear actions before decorative annoyances) and change the smallest useful set of components. Don't add dependencies, redesign unrelated screens, or exceed the change budget in §1.
