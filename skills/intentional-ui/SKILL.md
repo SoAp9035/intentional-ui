@@ -11,9 +11,12 @@ Create interfaces that suit their product and stay comfortable to read and use. 
 
 Decide which mode applies before changing anything. The mode depends on the task, not just on whether UI already exists. When rules in this skill conflict, this section wins.
 
-- **Existing UI, task is UI improvement** (polish, readability, "make it better," redesign): Preserve the visual identity, layout, interactions, and component system; prefer targeted edits over broad redesigns. Fix readability and usability problems, and remove §4 tells that fail their own test (e.g. an eyebrow that can be deleted without losing information).
+The core job is removing AI-generated tells (§4) and keeping the hard rules (§2). Readability (§5) and verification (§8) support that job; they are not a mandate for an accessibility audit or a codebase cleanup.
+
+- **Existing UI, task is UI improvement** (polish, readability, "make it better"): Preserve the visual identity, layout, interactions, and component system; prefer targeted edits over broad redesigns. Within the screens and components in scope, fix readability and usability problems and remove §4 tells that fail their own test (e.g. an eyebrow that can be deleted without losing information). An explicit redesign request counts as new UI for the screens it names.
 - **Existing UI, task is something else** (feature, bug fix): Don't sweep unrelated screens. Follow local conventions in new code and mention notable issues from §4–§5 in your report.
 - **New UI:** Apply this skill fully. Derive the direction from the product's content and users, not a default SaaS landing-page formula.
+- **Change budget in existing UI:** Keep the diff proportional to the task. Don't make codebase-wide mechanical changes — `px`→`rem`, color formats, renamed tokens, a new spacing or type scale, swapped fonts, a different styling approach — unless the user asks. Report systemic issues (units that block text resizing, contrast problems in the theme, an inconsistent type scale) with a short suggested fix instead of applying it. If a fix would touch shared tokens, global styles, or many files, ask first.
 - **What counts as intentional:** Distinctive choices that aren't §4 tells (a custom typeface, an unusual layout, hand-tuned spacing) are preserved by default; they don't need documentation. A §4 tell stays only with evidence — brand guidelines, a documented design-system component, the user saying so, or the pattern carrying real information. Repetition or consistency across the codebase is not evidence; generated codebases repeat their defaults. List every tell you remove in your report so a deliberate one can be restored.
 - **Always:** Follow explicit user references and intentional brand conventions. A familiar pattern is not automatically wrong; an unjustified default is.
 - **Game interfaces:** Stylized type, uppercase HUD labels, dense displays, and heavy effects can be part of the game's identity. Apply the readability rules to instructions, menus, settings, dialog, and anything players must read under time pressure.
@@ -67,7 +70,7 @@ A single familiar device can be appropriate; a collage of unrelated defaults is 
 - **Typeface and weight:** Legible letterforms with enough stroke weight at the rendered size. Don't swap an established project's font without a reason.
 - **Case:** For new UI, default to sentence case for headings and labels. In existing UI, keep the established convention (title case is a valid choice).
 - **Spacing:** Keep headings visually attached to their content; avoid forced line breaks, ultra-wide text containers, and gaps that disconnect related information.
-- **Responsive and zoom:** Use relative units and responsive adjustments. Content and functionality must survive 200% zoom. Don't make a hero compact by clipping or shrinking essential text.
+- **Responsive and zoom:** In new UI, use relative units and responsive adjustments. In existing UI, follow the project's unit convention; if it blocks text resizing, report it rather than converting units. Content and functionality must survive 200% zoom. Don't make a hero compact by clipping or shrinking essential text.
 
 Whitespace is not an excuse for faint, undersized, or uninformative copy.
 
@@ -99,16 +102,16 @@ Work in order of user impact:
 5. **Visual identity:** Grounded choices (§6), restrained effects.
 6. **Interactions:** Legible focus, hover, active, selected, disabled, loading, success, and error states. Respect `prefers-reduced-motion`.
 
-For existing UI, search likely components for `uppercase`, `tracking-widest`, `text-xs`, low-opacity text, arbitrary tiny font sizes, and repeated eyebrow/pill patterns — then **read their purpose before changing anything**. Rank findings by impact (unreadable copy and unclear actions before decorative annoyances) and change the smallest useful set of components and tokens. Don't add dependencies or redesign unrelated screens.
+For existing UI, search likely components for `uppercase`, `tracking-widest`, `text-xs`, low-opacity text, arbitrary tiny font sizes, and repeated eyebrow/pill patterns — then **read their purpose before changing anything**. Rank findings by impact (unreadable copy and unclear actions before decorative annoyances) and change the smallest useful set of components. Don't add dependencies, redesign unrelated screens, or exceed the change budget in §1.
 
 ## 8. Verification
 
-Check the rendered result, not just the CSS. Use whatever the environment offers:
+Check the rendered result, not just the CSS. Scale the checks to the change: for targeted edits, verify the affected screens; full zoom, reflow, and contrast passes are for new UI and layout changes. In existing UI, a failed check outside the task's scope goes into the report, not into the diff. Use whatever the environment offers:
 
 - **Screenshots:** Render the page in a browser (browser automation tools, Playwright, or Puppeteer) at about **375px** and **1440px** wide. When the layout changed, also check about **768px** and any breakpoint the CSS defines — layouts usually break between 768 and 1024px. Use screenshots to judge hierarchy, balance, wrapping, and regressions.
 - **Readability:** Don't judge text size from screenshots; they are downscaled when viewed. Read rendered `font-size`, `font-weight`, and `line-height` via `getComputedStyle` and compare them against the type roles in §5. Passing contrast alone doesn't make text comfortable to read.
 - **Contrast:** Read computed `color` and `background-color` for text elements and compute WCAG ratios, or use browser DevTools / Lighthouse accessibility audits. Sample gradients and images at the text's position.
-- **Text resize:** Enlarge text alone to 200% and confirm nothing is clipped, overlapped, hidden, or unreachable — this catches fixed-height containers. Prefer simulating the user's default font-size setting (browser settings, or in Chromium the experimental DevTools Protocol `Page.setFontSizes`). Injecting `html { font-size: 200% }` is a weaker diagnostic: it overrides a root locked to `px`, so it can pass a page that ignores user settings. If text doesn't scale, find the cause (`px` sizes, viewport-based `clamp()`, `!important` or inline overrides) rather than assuming one.
+- **Text resize:** Enlarge text alone to 200% and confirm nothing is clipped, overlapped, hidden, or unreachable — this catches fixed-height containers. Prefer simulating the user's default font-size setting (browser settings, or in Chromium the experimental DevTools Protocol `Page.setFontSizes`). Injecting `html { font-size: 200% }` is a weaker diagnostic: it overrides a root locked to `px`, so it can pass a page that ignores user settings. If text doesn't scale, find the cause (`px` sizes, viewport-based `clamp()`, `!important` or inline overrides) rather than assuming one; in existing UI, report it per §1.
 - **Zoom and reflow:** Page zoom behaves like a narrower viewport. Confirm content works at **320 CSS px** wide without horizontal scrolling (except for content that needs two dimensions, like data tables or maps).
 - **Build:** Run existing build/lint checks and a targeted smoke test; skip expensive unrelated suites.
 
