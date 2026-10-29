@@ -33,3 +33,7 @@ Manual installs: rerun the `curl` command above.
 ## Usage
 
 The skill loads automatically on UI tasks; no extra setup is needed.
+
+## License
+
+[MIT](LICENSE)
